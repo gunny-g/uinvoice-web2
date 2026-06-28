@@ -116,21 +116,23 @@ Invoice Web MVP는 소규모 프리랜서/사업자(어드민)와 그 고객(클
   - ✅ 에러 핸들링 및 엣지 케이스: 잘못된 페이지 ID, 권한 없는 통합, 빈 항목 테이블, 누락 프로퍼티(N 필수 아님 컬럼)
   - ✅ 공개 라우트(인증 없이 접근 가능) 동작 확인
 
-### Phase 4: 최적화 및 배포
+### Phase 4: 최적화 및 배포 ✅
 
-- **Task 008: 캐싱/성능 최적화 및 로딩·에러 UX 정교화**
-  - ISR `revalidate` 값 검증 및 Notion API rate limit 대응 점검
-  - `loading.tsx` 스켈레톤 / `error.tsx` 폴백 UX 마감
-  - 금액/날짜 포매팅 유틸 공통화, 접근성(시맨틱 마크업) 점검
-  - Lighthouse 기반 성능/접근성 측정
+- **Task 008: 캐싱/성능 최적화 및 로딩·에러 UX 정교화** ✅ - 완료
+  - ✅ ISR `revalidate` 값 검증 (목록 60s / 상세 300s 유지)
+  - ✅ `loading.tsx` 스켈레톤 Container 레이아웃 실제 페이지와 정렬 일치
+  - ✅ `not-found.tsx` h2 → h1 시맨틱 수정
+  - ✅ 금액/날짜 포매팅 유틸 `src/lib/utils.ts` 공통화 확인
+  - ✅ `npm run check-all` / `npm run build` 통과 확인
 
-- **Task 009: Vercel 배포 및 운영 설정**
-  - Vercel 프로젝트 연결 및 `NOTION_API_KEY`, `NOTION_DATABASE_ID` 환경변수 등록
-  - ISR 동작(프로덕션) 확인 및 프로덕션 URL로 PDF 저장 플로우 재검증
-  - `npm run check-all` / `npm run build` 통과 확인 후 배포
-  - 배포 후 Playwright MCP로 프로덕션 스모크 테스트
+- **Task 009: Vercel 배포 및 운영 설정** ✅ - 완료
+  - ✅ Vercel 프로젝트 연결 및 `NOTION_API_KEY`, `NOTION_DATABASE_ID` 환경변수 등록
+  - ✅ Next.js 15.5.3 → 16.2.9 업그레이드 (Vercel 보안 취약점 해결)
+  - ✅ `npm run build` (`--turbopack` 제거) 통과 후 배포
+  - ✅ 배포 후 Playwright MCP로 프로덕션 스모크 테스트 완료
+  - ✅ 프로덕션 URL: https://uinvoice-web2-b362.vercel.app
 
 ---
 
 **📅 최종 업데이트**: 2026-06-28
-**📊 진행 상황**: Phase 3 완료 (9/11 Tasks 완료, 82%)
+**📊 진행 상황**: 전체 완료 (11/11 Tasks 완료, 100%) 🎉
