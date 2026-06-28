@@ -1,0 +1,18 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - heading "견적서 목록을 불러올 수 없습니다" [level=2] [ref=e3]
+    - paragraph [ref=e4]: "path failed validation: path.database_id should be a valid uuid, instead was `\"h38d44f98677580c1b41edcb71e5e5f5c\"`."
+    - button "다시 시도" [ref=e5]
+  - region "Notifications alt+T"
+  - generic [ref=e10] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e11]:
+      - img [ref=e12]
+    - generic [ref=e15]:
+      - button "Open issues overlay" [ref=e16]:
+        - generic [ref=e17]:
+          - generic [ref=e18]: "0"
+          - generic [ref=e19]: "1"
+        - generic [ref=e20]: Issue
+      - button "Collapse issues badge" [ref=e21]:
+        - img [ref=e22]
+  - alert [ref=e24]

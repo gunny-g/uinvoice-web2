@@ -1,0 +1,15 @@
+[     162ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:14537
+[     304ms] [WARNING] %c%s%c @notionhq/client warn: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   request fail {code: validation_error, message: path failed validation: path.database_id should be…nstead was `"h38d44f98677580c1b41edcb71e5e5f5c"`., attempt: 0, requestId: 4d392041-eb6f-4fb0-b003-b8e6e54277d3} @ about://React/Server/file:///home/asra00/ws/dd_claude/ucourse/invoice-web/.next/server/chunks/ssr/%5Broot-of-the-server%5D__e835ea60._.js?12:430
+[     322ms] [ERROR] %o
+
+%s APIResponseError: path failed validation: path.database_id should be a valid uuid, instead was `"h38d44f98677580c1b41edcb71e5e5f5c"`.
+    at resolveDataSourceId (about://React/Server/file:///home/asra00/ws/dd_claude/ucourse/invoice-web/.next/server/chunks/ssr/%5Broot-of-the-server%5D__e835ea60._.js?12:431:22)
+    at queryDatabase (about://React/Server/file:///home/asra00/ws/dd_claude/ucourse/invoice-web/.next/server/chunks/ssr/%5Broot-of-the-server%5D__e835ea60._.js?13:446:26)
+    at InvoicesPage (about://React/Server/file:///home/asra00/ws/dd_claude/ucourse/invoice-web/.next/server/chunks/ssr/%5Broot-of-the-server%5D__e835ea60._.js?14:488:22)
+    at resolveErrorDev (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:4265:48)
+    at processFullStringRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:4513:29)
+    at processFullBinaryRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:4472:9)
+    at processBinaryChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:4581:98)
+    at progress (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:4747:25) The above error occurred in the <InvoicesPage> component. It was handled by the <ErrorBoundaryHandler> error boundary. @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:1247
+[     468ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:5949
+[     576ms] [LOG] [Fast Refresh] done in 208ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:5809

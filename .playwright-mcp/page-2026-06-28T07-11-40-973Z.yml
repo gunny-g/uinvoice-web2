@@ -1,0 +1,10 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - heading "견적서를 찾을 수 없습니다" [level=2] [ref=e3]
+    - paragraph [ref=e4]: 요청하신 견적서가 존재하지 않거나 접근할 수 없습니다.
+    - link "목록으로 돌아가기" [ref=e5] [cursor=pointer]:
+      - /url: /invoices
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e11] [cursor=pointer]:
+    - img [ref=e12]
+  - alert [ref=e15]

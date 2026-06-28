@@ -1,0 +1,63 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e115]:
+    - generic [ref=e116]:
+      - heading "견적서 목록" [level=1] [ref=e117]
+      - link "← 홈으로" [ref=e118] [cursor=pointer]:
+        - /url: /
+    - generic [ref=e119]:
+      - generic [ref=e120]:
+        - generic [ref=e121]: 견적번호
+        - generic [ref=e122]: 클라이언트
+        - generic [ref=e123]: 발행일
+        - generic [ref=e124]: 상태
+        - generic [ref=e125]: 금액
+      - list "견적서 목록" [ref=e126]:
+        - listitem [ref=e127]:
+          - link "견적서 INV-TEST-001 상세보기" [ref=e128] [cursor=pointer]:
+            - /url: /invoices/38d44f98-6775-80fe-8121-cba77fbd19fc
+            - generic [ref=e129]:
+              - generic [ref=e130]: INV-TEST-001
+              - generic [ref=e131]: 테스트 주식회사
+              - generic [ref=e132]: 2026.06.01
+              - generic [ref=e133]: 승인
+              - generic [ref=e134]: ₩2,015,000
+        - listitem [ref=e135]:
+          - link "견적서 INV-TEST-002 상세보기" [ref=e136] [cursor=pointer]:
+            - /url: /invoices/38d44f98-6775-80e1-84d8-d1e8829384be
+            - generic [ref=e137]:
+              - generic [ref=e138]: INV-TEST-002
+              - generic [ref=e139]: 홍길동 개인사업자
+              - generic [ref=e140]: 2026.05.01
+              - generic [ref=e141]: 대기
+              - generic [ref=e142]: ₩5,650,000
+        - listitem [ref=e143]:
+          - link "견적서 INV-TEST-003 상세보기" [ref=e144] [cursor=pointer]:
+            - /url: /invoices/38d44f98-6775-808e-ad15-eeff164278d7
+            - generic [ref=e145]:
+              - generic [ref=e146]: INV-TEST-003
+              - generic [ref=e147]: (주)거절테스트
+              - generic [ref=e148]: 2026.04.01
+              - generic [ref=e149]: 거절
+              - generic [ref=e150]: ₩4,600,000
+        - listitem [ref=e151]:
+          - link "견적서 INV-TEST-004 상세보기" [ref=e152] [cursor=pointer]:
+            - /url: /invoices/38d44f98-6775-8024-ba8b-d813c189f27f
+            - generic [ref=e153]:
+              - generic [ref=e154]: INV-TEST-004
+              - generic [ref=e155]: 금액없음테스트
+              - generic [ref=e156]: 2026.03.01
+              - generic [ref=e157]: 대기
+              - generic [ref=e158]: ₩4,350,000
+        - listitem [ref=e159]:
+          - link "견적서 INV-2025-001 상세보기" [ref=e160] [cursor=pointer]:
+            - /url: /invoices/38d44f98-6775-806c-83b0-d020631d7b54
+            - generic [ref=e161]:
+              - generic [ref=e162]: INV-2025-001
+              - generic [ref=e163]: ABC 냐
+              - generic [ref=e164]: 2025.08.06
+              - generic [ref=e165]: 대기
+              - generic [ref=e166]: ₩5,015,000
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e59] [cursor=pointer]:
+    - img [ref=e60]
+  - alert [ref=e63]
