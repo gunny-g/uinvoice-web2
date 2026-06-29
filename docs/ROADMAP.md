@@ -1,17 +1,23 @@
-# Invoice Web MVP 개발 로드맵
+# Invoice Web 고도화 로드맵
 
-Notion에 입력한 견적서 데이터를 클라이언트가 로그인 없이 웹 URL로 확인하고 PDF로 저장할 수 있게 하는 서비스.
+MVP로 완성된 Notion 기반 견적서 공유 서비스를 어드민 친화적 UI, 공유 편의 기능, 다크모드를 갖춘 운영 가능한 서비스로 확장한다.
 
 ## 개요
 
-Invoice Web MVP는 소규모 프리랜서/사업자(어드민)와 그 고객(클라이언트)를 위한 "Notion 기반 견적서 공유 서비스"로 다음 기능을 제공합니다:
+Invoice Web MVP는 이미 모든 핵심 기능이 구현 완료되었습니다 (상세: `docs/roadmaps/ROADMAP_v1.md`):
 
-- **견적서 공개 조회**: 인증 없이 `/invoices/[id]` URL로 견적서 상세를 확인 (F002, F004)
-- **PDF 다운로드**: `window.print()` + `@media print` CSS로 별도 라이브러리 없이 PDF 저장 (F003)
-- **Notion 연동 데이터 소싱**: Notion DB와 페이지 블록을 단일 데이터 소스로 사용, ISR로 API 호출 최소화 (F001, F010, F012)
+- **견적서 공개 조회**: 인증 없이 `/invoices/[id]` URL로 견적서 상세 확인
+- **PDF 다운로드**: `window.print()` + `@media print` CSS 기반 저장
+- **Notion 연동 + ISR**: 목록 60s / 상세 300s 캐싱, 자체 DB 없음
+- **배포 완료**: https://uinvoice-web2-b362.vercel.app (Vercel)
 
-> **데이터 저장소**: Notion이 유일한 데이터 저장소이며 앱 자체 DB는 없습니다.
-> **인증 없음**: 모든 견적서 라우트는 공개 라우트입니다 (MVP 제외 항목: 로그인/인증/에디터/이메일/전자서명/i18n/알림).
+본 고도화 로드맵은 MVP의 기본 목록 화면을 운영자가 실제로 사용할 수 있는 **관리자 경험**으로 끌어올리는 것을 목표로 하며, 다음 3가지를 추가합니다:
+
+- **관리자 레이아웃(Admin Layout)**: 사이드바/헤더를 갖춘 어드민 대시보드 레이아웃으로 견적서 목록 제공 (`(admin)` 라우트 그룹)
+- **클라이언트 링크 복사**: 목록에서 각 견적서의 공개 URL을 클립보드에 복사 + 토스트 피드백
+- **다크모드**: 시스템 감지 + 수동 토글 (`next-themes`), 헤더에 토글 버튼 배치
+
+> **유지 원칙**: 공개 견적서 상세 라우트(`/invoices/[id]`)는 클라이언트 노출용이므로 어드민 레이아웃과 분리하여 변경하지 않습니다. Notion이 유일한 데이터 소스이며 앱 자체 DB는 도입하지 않습니다.
 
 ## 개발 워크플로우
 
@@ -25,7 +31,7 @@ Invoice Web MVP는 소규모 프리랜서/사업자(어드민)와 그 고객(클
 
 - 기존 코드베이스를 학습하고 현재 상태를 파악
 - `/tasks` 디렉토리에 새 작업 파일 생성
-- 명명 형식: `XXX-description.md` (예: `001-setup.md`)
+- 명명 형식: `XXX-description.md` (예: `001-admin-layout.md`)
 - 고수준 명세서, 관련 파일, 수락 기준, 구현 단계 포함
 - **API/비즈니스 로직 작업 시 "## 테스트 체크리스트" 섹션 필수 포함 (Playwright MCP 테스트 시나리오 작성)**
 - 예시를 위해 `/tasks` 디렉토리의 마지막 완료된 작업 참조. 예를 들어, 현재 작업이 `006`이라면 `005`와 `004`를 예시로 참조.
@@ -35,7 +41,7 @@ Invoice Web MVP는 소규모 프리랜서/사업자(어드민)와 그 고객(클
 
 - 작업 파일의 명세서를 따름
 - 기능과 기능성 구현
-- **Notion API 연동 및 비즈니스 로직 구현 시 Playwright MCP로 테스트 수행 필수**
+- **Notion API 연동 및 비즈니스 로직(링크 복사/테마) 구현 시 Playwright MCP로 테스트 수행 필수**
 - 각 단계 후 작업 파일 내 단계 진행 상황 업데이트
 - 구현 완료 후 Playwright MCP를 사용한 E2E 테스트 실행
 - 테스트 통과 확인 후 다음 단계로 진행
@@ -47,92 +53,73 @@ Invoice Web MVP는 소규모 프리랜서/사업자(어드민)와 그 고객(클
 
 ## 개발 단계
 
-### Phase 1: 애플리케이션 골격 구축
+### Phase 5: 애플리케이션 골격 구축 ✅
 
-- **Task 001: 프로젝트 라우트 구조 및 페이지 골격 생성** ✅ - 완료
-  - `src/app/invoices/page.tsx` (목록) 빈 껍데기 생성
-  - `src/app/invoices/[id]/page.tsx` (상세) 빈 껍데기 생성
-  - 각 페이지에 뒤로가기 링크 골격 배치 (별도 헤더 내비게이션 없음)
-  - 라우트 세그먼트 파일 골격 추가:
-    - `src/app/invoices/loading.tsx`, `src/app/invoices/error.tsx`
-    - `src/app/invoices/[id]/not-found.tsx` (잘못된 페이지 ID → 404), `src/app/invoices/[id]/loading.tsx`, `src/app/invoices/[id]/error.tsx`
-  - 루트 레이아웃에서 불필요한 스타터 마크업 정리
+- **Task 010: 어드민 라우트 그룹 구조 및 레이아웃 골격 생성** ✅ - 완료
+  - ✅ `src/app/(admin)/layout.tsx` 어드민 공통 레이아웃 골격 생성 (사이드바 영역 + 헤더 영역 + 콘텐츠 슬롯 구조만)
+  - ✅ `src/app/(admin)/invoices/page.tsx` 어드민 견적서 목록 빈 껍데기 생성
+  - ✅ 기존 `/invoices/page.tsx` → `(admin)` 그룹으로 이전 경로 결정 (URL 유지: `/invoices`)
+  - ✅ 공개 상세 라우트 `src/app/invoices/[id]/page.tsx`는 어드민 레이아웃에 포함되지 않도록 라우트 그룹 경계 검증
+  - ✅ `src/app/(admin)/loading.tsx`, `error.tsx` 세그먼트 파일 골격 추가
 
-- **Task 002: 타입 정의 및 Notion 매핑 인터페이스 설계** ✅ - 완료
-  - ✅ `src/types/invoice.ts`에 `Invoice`, `InvoiceItem` 인터페이스 정의
-  - ✅ `Invoice` 필드: `id`, `invoiceNumber`, `clientName`, `issueDate`, `dueDate`, `status`, `total`, `itemIds`
-  - ✅ `InvoiceItem` 필드: `id`, `name`, `quantity`, `unitPrice`, `amount`
-  - ✅ `status` 유니온 타입 정의 (`대기` | `승인` | `거절`)
-  - ✅ `src/lib/notion/invoice.ts`에 매핑 함수 시그니처 골격 작성 (`mapPageToInvoice`, `mapPageToInvoiceItem`)
-  - ✅ `src/lib/notion/transformers.ts`에 `extractRelation`, `extractFormula` 추가
+- **Task 011: 다크모드 인프라 구축 (ThemeProvider · Tailwind 설정)** ✅ - 완료
+  - ✅ `next-themes` 설치 및 `src/components/providers/theme-provider.tsx` 작성 (`attribute="class"`, `defaultTheme="system"`, `enableSystem`)
+  - ✅ 루트 `src/app/layout.tsx`에 `ThemeProvider` 래핑 + `<html suppressHydrationWarning>` 적용
+  - ✅ TailwindCSS v4 다크모드 설정 (`@custom-variant dark`)을 `globals.css`에 반영
+  - ✅ 다크모드용 CSS 변수(라이트/다크 토큰) 정의 및 shadcn 토큰 매핑 확인
+  - ✅ `@media print` 스타일이 다크모드 영향 없이 항상 라이트로 출력되는지 골격 단계에서 점검 포인트 기록
 
-- **Task 002-1: Notion 클라이언트 및 환경변수 검증 기반** ✅ - 완료 (기존 구현)
-  - ✅ `src/lib/notion/client.ts` Notion SDK v5 싱글톤 클라이언트
-  - ✅ `src/lib/notion/queries.ts` `queryDatabase()`, `getPageById()` (data_source_id 해석 포함)
-  - ✅ `src/lib/notion/transformers.ts` 프로퍼티 추출기 (`extractTitle/RichText/Number/Select/Date/Checkbox/Url`)
-  - ✅ `src/lib/env.ts` Zod 기반 `NOTION_API_KEY`, `NOTION_DATABASE_ID` 검증
+### Phase 6: UI/UX 완성 (더미 데이터 활용)
 
-### Phase 2: UI/UX 완성 (더미 데이터 활용) ✅
+- **Task 012: 어드민 UI 컴포넌트 구현 (사이드바 · 헤더 · 다크모드 토글)**
+  - shadcn/ui 컴포넌트 추가: `npx shadcn@latest add dropdown-menu`, `sonner` 등 필요 항목
+  - `src/components/admin/AdminSidebar.tsx` 네비게이션 사이드바 (메뉴 항목 더미)
+  - `src/components/admin/AdminHeader.tsx` 어드민 헤더 (타이틀 + 우측 액션 영역, 다크모드 토글 슬롯)
+  - `src/components/ui/theme-toggle.tsx` 라이트/다크/시스템 전환 토글 버튼 (Lucide `Sun`/`Moon` 아이콘)
+  - 반응형: 모바일에서 사이드바 접힘/드로어 처리, 데스크탑 고정 사이드바
+  - `(admin)/layout.tsx`에 사이드바·헤더 실제 배치 (더미 상태)
 
-- **Task 003: 견적서 공통 컴포넌트 라이브러리 구현** ✅ - 완료
-  - ✅ shadcn/ui 컴포넌트 추가: `npx shadcn@latest add table`
-  - ✅ `src/components/invoice/StatusBadge.tsx` 상태별 색상 뱃지 (F011)
-  - ✅ `src/components/invoice/InvoiceCard.tsx` 목록 행 컴포넌트
-  - ✅ `src/lib/mock/invoices.ts` 더미 견적서/항목 데이터 유틸 작성
-  - ✅ `src/lib/utils.ts` formatCurrency, formatDate 포매터 추가
+- **Task 013: 어드민 견적서 목록 UI + 링크 복사 버튼 UI 구현 (더미 데이터)**
+  - 어드민 견적서 목록 테이블/카드 UI 완성 (상태 뱃지, 발행일 정렬 표시 — 기존 `InvoiceCard`/`StatusBadge` 재사용)
+  - `src/components/admin/CopyLinkButton.tsx` 링크 복사 버튼/아이콘 UI 구현 (아직 클립보드 동작 미연결, UI 상태만)
+  - 각 목록 행에 CopyLinkButton 배치 및 hover/포커스 인터랙션 스타일
+  - 라이트/다크모드 양쪽에서 목록·사이드바·헤더 시각 검증
+  - 더미 데이터로 전체 어드민 화면 플로우 렌더링 확인
 
-- **Task 004: 견적서 목록 / 상세 페이지 UI 완성 (더미 데이터)** ✅ - 완료
-  - ✅ 목록 페이지: 카드/테이블 레이아웃 + 상태 뱃지 + 발행일 정렬 표시
-  - ✅ 상세 페이지: `InvoiceDetail`, `InvoiceItemTable`, `InvoiceSummary` 컴포넌트로 견적서 본문 구성
-  - ✅ `InvoiceSummary`에 총금액 표시 (소계/부가세율 컬럼 없음 — Notion DB 기준)
-  - ✅ 반응형 디자인 및 모바일 최적화, 네비게이션(뒤로가기) 검증
-  - ✅ 더미 데이터로 렌더링 (API 연동 전)
+### Phase 7: 핵심 기능 구현
 
-- **Task 005: PDF 인쇄 레이아웃 및 PrintButton 구현** ✅ - 완료
-  - ✅ `src/components/invoice/PrintButton.tsx` Client Component (`window.print()`) (F003)
-  - ✅ `@media print` CSS: `.no-print` 숨김, `@page { margin: 20mm; size: A4 }`, 본문 12pt
-  - ✅ 인쇄 시 버튼/네비게이션 숨김
-  - ✅ `globals.css`에 print 스타일 추가 (`@layer` 밖 배치)
+- **Task 014: 어드민 견적서 목록 실데이터 연동 (Notion API)** - 우선순위
+  - `(admin)/invoices/page.tsx`에서 `queryDatabase(NOTION_DATABASE_ID, { sorts: [{ property: '발행일', direction: 'descending' }] })` 호출 (기존 매핑 레이어 재사용)
+  - 더미 데이터를 실제 `Invoice[]`로 교체
+  - `export const revalidate = 60` ISR 유지/검증
+  - Playwright MCP로 어드민 목록 렌더링/정렬/상태 뱃지/빈 목록 통합 테스트
+  - **테스트 체크리스트** 작업 파일에 포함
 
-### Phase 3: 핵심 기능 구현 (Notion 실데이터 연동) ✅
+- **Task 015: 링크 복사 기능 구현 + 토스트 피드백**
+  - 공개 URL 조립 유틸 작성: `${NEXT_PUBLIC_SITE_URL}/invoices/[notionPageId]` (환경변수 `NEXT_PUBLIC_SITE_URL` 추가, `src/lib/env.ts` Zod 스키마 확장)
+  - `CopyLinkButton`에 `navigator.clipboard.writeText()` 연결, 클립보드 미지원 환경 폴백 처리
+  - `sonner`(또는 shadcn toast) 토스트로 복사 성공/실패 피드백 표시, `(admin)/layout.tsx`에 `<Toaster />` 배치
+  - 복사된 URL이 공개 상세 페이지로 정상 접근되는지 왕복 검증
+  - Playwright MCP로 복사 클릭 → 토스트 노출 → 클립보드 값 검증 E2E 테스트
+  - **테스트 체크리스트** 작업 파일에 포함
 
-- **Task 006: Notion 매핑 레이어 및 목록 페이지 실데이터 연동** ✅ - 완료
-  - ✅ `src/lib/notion/invoice.ts` Notion 페이지 → `Invoice` 매핑 함수 구현 (transformers 활용)
-  - ✅ 목록 페이지에서 `queryDatabase(NOTION_DATABASE_ID, { sorts: [{ property: '발행일', direction: 'descending' }] })` 호출 (F001, F010)
-  - ✅ 더미 데이터를 실제 Notion 응답으로 교체, `src/lib/mock/` 디렉토리 삭제
-  - ✅ `export const revalidate = 60` ISR 적용 (F012)
-  - ✅ Playwright MCP로 목록 페이지 렌더링/정렬/상태 뱃지 통합 테스트
+- **Task 015-1: 고도화 기능 통합 테스트 (Playwright MCP)**
+  - 전체 어드민 플로우 테스트: 어드민 목록 진입 → 링크 복사 → 다크모드 토글 → 공개 상세로 이동
+  - 다크모드 토글 동작 검증: 시스템 감지, 수동 전환, 새로고침 후 로컬스토리지 테마 유지(FOUC 없음)
+  - 링크 복사 정확성 검증: 생성 URL 형식, 클립보드 값, 토스트 메시지
+  - 에러/엣지 케이스: 클립보드 권한 거부, 빈 견적서 목록, 모바일 사이드바 토글, 공개 상세 라우트가 어드민 레이아웃에 노출되지 않음 확인
 
-- **Task 007: 견적서 상세 페이지 실데이터 연동 및 항목 Relation 파싱** ✅ - 완료
-  - ✅ `getPageById(params.id)` + `isFullPage` 가드, 실패 시 `notFound()` (F002, F004)
-  - ✅ `extractRelation`으로 `itemIds` 추출 → 각 ID마다 `notion.pages.retrieve(itemId)` 호출 → `mapPageToInvoiceItem()` 변환 (F002)
-  - ✅ 견적 항목 테이블 / 요약(총금액) 실데이터 렌더링
-  - ✅ `export const revalidate = 300` ISR 적용 (F012)
-  - ✅ Playwright MCP로 유효 ID/존재하지 않는 ID(404)/항목 Relation 파싱 E2E 테스트
+### Phase 8: 최적화 및 배포
 
-- **Task 007-1: 핵심 기능 통합 테스트** ✅ - 완료
-  - ✅ Playwright MCP로 전체 사용자 플로우 테스트: 목록 → 행 클릭 → 상세 → PDF 저장
-  - ✅ Notion API 응답 매핑 정확성 검증 (금액/날짜/상태 포맷)
-  - ✅ 에러 핸들링 및 엣지 케이스: 잘못된 페이지 ID, 권한 없는 통합, 빈 항목 테이블, 누락 프로퍼티(N 필수 아님 컬럼)
-  - ✅ 공개 라우트(인증 없이 접근 가능) 동작 확인
-
-### Phase 4: 최적화 및 배포 ✅
-
-- **Task 008: 캐싱/성능 최적화 및 로딩·에러 UX 정교화** ✅ - 완료
-  - ✅ ISR `revalidate` 값 검증 (목록 60s / 상세 300s 유지)
-  - ✅ `loading.tsx` 스켈레톤 Container 레이아웃 실제 페이지와 정렬 일치
-  - ✅ `not-found.tsx` h2 → h1 시맨틱 수정
-  - ✅ 금액/날짜 포매팅 유틸 `src/lib/utils.ts` 공통화 확인
-  - ✅ `npm run check-all` / `npm run build` 통과 확인
-
-- **Task 009: Vercel 배포 및 운영 설정** ✅ - 완료
-  - ✅ Vercel 프로젝트 연결 및 `NOTION_API_KEY`, `NOTION_DATABASE_ID` 환경변수 등록
-  - ✅ Next.js 15.5.3 → 16.2.9 업그레이드 (Vercel 보안 취약점 해결)
-  - ✅ `npm run build` (`--turbopack` 제거) 통과 후 배포
-  - ✅ 배포 후 Playwright MCP로 프로덕션 스모크 테스트 완료
-  - ✅ 프로덕션 URL: https://uinvoice-web2-b362.vercel.app
+- **Task 016: 성능 최적화 및 배포 검증**
+  - 다크모드 하이드레이션 점검 (`suppressHydrationWarning`, FOUC 제거), 테마 전환 리렌더 비용 확인
+  - 어드민 레이아웃 컴포넌트 Server/Client 경계 최적화 (사이드바/헤더 정적화, 토글·복사 버튼만 Client)
+  - `NEXT_PUBLIC_SITE_URL` 등 신규 환경변수 Vercel 등록 및 프로덕션 URL 반영
+  - `npm run check-all` / `npm run build` 통과 확인 후 배포
+  - 배포 후 Playwright MCP로 프로덕션 스모크 테스트 (어드민 목록 · 링크 복사 · 다크모드)
 
 ---
 
-**📅 최종 업데이트**: 2026-06-28
-**📊 진행 상황**: 전체 완료 (11/11 Tasks 완료, 100%) 🎉
+**📅 최종 업데이트**: 2026-06-30
+**📊 진행 상황**: Phase 5 완료 (2/8 Tasks 완료, 25%)
+**🔗 이전 단계**: MVP 완료 — `docs/roadmaps/ROADMAP_v1.md`

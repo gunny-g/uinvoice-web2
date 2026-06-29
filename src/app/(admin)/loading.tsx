@@ -1,8 +1,7 @@
+import { Container } from '@/components/layout/container'
 import { Skeleton } from '@/components/ui/skeleton'
 
-import { Container } from '@/components/layout/container'
-
-export default function InvoicesLoading() {
+export default function AdminLoading() {
   return (
     <Container size="md" className="py-10">
       <div className="mb-6 flex items-center justify-between">
